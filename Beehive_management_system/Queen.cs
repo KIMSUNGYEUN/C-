@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Beehive_management_system
 {
-    class Queen
+    class Queen : Bee
     {
-        public Queen(Worker[] workers)
+        public Queen(Worker[] workers) : base(275)
         {
             this.workers = workers;
         }
@@ -26,11 +26,13 @@ namespace Beehive_management_system
 
         public string WorkTheNextShift()
         {
-            shiftNumber++;
+            double totalConsumption = 0;
             string report = "Report for shift #" + shiftNumber + "\r\n";
             for(int i = 0; i < workers.Length; i++)
-            {
-                if (workers[i].WorkOneShift())
+                totalConsumption += workers[i].GetHoneyConsumption();
+            totalConsumption += GetHoneyConsumption();
+
+                /*if (workers[i].WorkOneShift())
                     report += "Worker #" + (i + 1) + "finished the job\r\n";
                 if (String.IsNullOrEmpty(workers[i].CurrentJob))
                     report += "Worker #" + (i + 1) + "is not working\r\n";
@@ -38,9 +40,30 @@ namespace Beehive_management_system
                     if (workers[i].ShiftsLeft > 0)
                     report += "Worker #" + (i + 1) + "is doing '" + workers[i].CurrentJob + "' for " + workers[i].ShiftsLeft + "more shifts\r\n";
                 else
-                    report += "Worker #" + (i + 1) + " will be done with '" + workers[i].CurrentJob + "' after this shift\r\n";
-            }
+                    report += "Worker #" + (i + 1) + " will be done with '" + workers[i].CurrentJob + "' after this shift\r\n";*/
+            report += "Total honey consumption: " + totalConsumption + " units";
             return report;
+        }
+
+        public override double GetHoneyConsumption()
+        {
+            double consumption = 0;
+            double largestWorkerConsumption = 0;
+            int workersDoingJobs = 0;
+            for (int i = 0; i < workers.Length; i++) {
+                if (workers[i].GetHoneyConsumption() > largestWorkerConsumption)
+                    largestWorkerConsumption = workers[i].GetHoneyConsumption();
+                if (workers[i].ShiftsLeft > 0)
+                    workersDoingJobs++;
+            }
+            consumption += largestWorkerConsumption;
+            if (workersDoingJobs >= 3)
+                consumption += 30;
+            else
+                consumption += 20;
+
+            return consumption;
         }
     }
 }
+
