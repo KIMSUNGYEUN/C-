@@ -57,7 +57,7 @@ namespace Explore_the_house
 
     class RoomWithDoor : RoomWithHidingPlace, IHasExteriorDoor
     {
-        public RoomWithDoor(string name, string decoration, string doorDescription) : base(name, decoration)
+        public RoomWithDoor(string name, string decoration, string hidingPlaceName,string doorDescription) : base(name, decoration, hidingPlaceName)
         {
             this.doorDescription = doorDescription;
         }
@@ -74,5 +74,15 @@ namespace Explore_the_house
             get { return doorLocation; }
             set { doorLocation = value; }
         }
+    }
+
+    class OutsideWitchHidingPlace : Outside, IHidingPlace
+    {
+        public OutsideWitchHidingPlace (string name, bool hot, string hidingPlaceName):base(name, hot)
+        {
+            this.hidingPlaceName = hidingPlaceName;
+        }
+
+        private string hidingPlaceName;
     }
 }
