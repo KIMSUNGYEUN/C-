@@ -1,41 +1,67 @@
-namespace ConsoleApp2
+using System;
+
+namespace ConsoleApp5
 {
     class Program
     {
-        static void Main(string[] args)
+        //// 4요소 permutation
+        
+        const int LL = 6;
+        static string org_str = " ABCDEFGHIJ";
+        static char[] org = new char[11];
+        static int cnt = 0;
+        static int p;
+        static void permutation()
         {
-            char[] datas = new char[] { 'a', 'b', 'c', 'd' };
+            Console.Write("[{0:d3}] ", ++cnt);
 
-            Perm(datas, 0);
+            for (int a = 1; a <= LL; a++)
+            {
+                Console.Write("{0} ", org[a]);
+            }
+            Console.WriteLine();
 
-            Console.ReadKey();
+            p = 0;
+            for (int k = 1; k < LL; k++)
+            {
+                if (org[k] < org[k + 1])
+                    p = k;
+            }
+            
+            if (p == 0) return;
+            
+            int q;
+            char temp;
+            for (q = LL; q > 0; q--)
+            {
+                if (org[q] > org[p])
+                    break;
+            }
+
+            temp = org[p];
+            org[p] = org[q];
+            org[q] = temp;
+
+            for (int a = p + 1; a <= (p + 1 + LL) / 2; a++)
+            {
+                q = p + 1 + LL - a;
+                temp = org[a];
+                org[a] = org[q];
+                org[q] = temp;
+            }
         }
 
-        private static void Perm(char[] a, int k)
+        static void Main(string[] args)
         {
-            if (k == a.Length - 1)//순열을 출력
+            p = 1;
+            for (int a = 1; a <= LL; a++)
             {
-                for (int i = 0; i < a.Length; i++)
-                {
-                    Console.Write("{0} ", a[i]);
-                }
-                Console.WriteLine();
+                org[a] = org_str[a];
             }
-            else
-            {
-                for (int i = k; i < a.Length; i++)
-                {
-                    //a[k]와 a[i]를 교환
-                    char temp = a[k];
-                    a[k] = a[i];
-                    a[i] = temp;
 
-                    Perm(a, k + 1); //a[k+1],…,a[n-1]에 대한 모든 순열
-                    //원래 상태로 되돌리기 위해 a[k]와 a[i]를 다시 교환
-                    temp = a[k];
-                    a[k] = a[i];
-                    a[i] = temp;
-                }
+            while (p != 0) 
+            {
+                permutation();
             }
         }
     }
